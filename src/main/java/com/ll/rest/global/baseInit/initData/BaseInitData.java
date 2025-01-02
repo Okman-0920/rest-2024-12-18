@@ -1,7 +1,7 @@
-package com.ll.rest.global.baseInit;
+package com.ll.rest.global.baseInit.initData;
 
-import com.ll.tem.domain.post.post.entity.Post;
-import com.ll.tem.domain.post.post.repository.PostService;
+import com.ll.rest.domain.post.post.entity.Post;
+import com.ll.rest.domain.post.post.repository.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
