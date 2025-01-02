@@ -1,4 +1,4 @@
-package com.ll.rest.global.baseInit.entity;
+package com.ll.rest.global.baseInit.jpa.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
