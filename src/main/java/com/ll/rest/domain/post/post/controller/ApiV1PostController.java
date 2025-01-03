@@ -51,7 +51,7 @@ public class ApiV1PostController {
 
         postService.delete(post);
 
-        return new RsData(
+        return new RsData (
                 "200-1",
                 "%d번 글이 삭제되었습니다".formatted(id)
         );
@@ -71,7 +71,7 @@ public class ApiV1PostController {
 
     @PutMapping("/{id}")
     @Transactional
-    public RsData modifyItem(
+    public RsData<PostDto> modifyItem(
             @PathVariable long id,
             @RequestBody @Valid PostModifyBody reqBody
             /* @RequestBody: HTTP 요청(request)의 본문(Body)을 Java객체로 변환
@@ -87,7 +87,7 @@ public class ApiV1PostController {
         // 사용자가 수정할 post의 id값을 가져옴
         // 사용자가 입력한 title과, content값을 인자로 가져옴
 
-        return new RsData(
+        return new RsData<>(
                 "200-1",
                 "%d번 글이 수정되었습니다".formatted(id),
                 new PostDto(post)
@@ -107,12 +107,12 @@ public class ApiV1PostController {
     }
 
     @PostMapping("/write")
-    public RsData writeItem(
+    public RsData<Long> writeItem(
             @RequestBody @Valid PostWriteBody reqBody
     ) {
         Post post = postService.write(reqBody.title, reqBody.content);
 
-        return new RsData(
+        return new RsData<>(
                 "200-1",
                 "%d번 글이 작성되었습니다".formatted(post.getId()),
                 post.getId()
