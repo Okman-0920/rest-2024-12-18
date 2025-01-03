@@ -1,6 +1,5 @@
 package com.ll.rest.global.aspect;
 
-import com.ll.rest.global.rsData.RsData;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,7 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ResponseAspect {
-    private  final HttpServletResponse response;
+    private final HttpServletResponse response;
+
     @Around("""
             (
                 within
@@ -38,10 +38,9 @@ public class ResponseAspect {
     public Object handleResponse(ProceedingJoinPoint joinPoint) throws Throwable {
         Object proceed = joinPoint.proceed();
 
-        if (proceed instanceof RsData<?>) {
-            RsData<?> rsData = (RsData<?>) proceed;
-            response.setStatus(rsData.getStatusCode());
-        }
+
+
+        response.setStatus();
 
         return proceed;
     }
