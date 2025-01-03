@@ -115,15 +115,13 @@ public class ApiV1PostController {
     ) {
         Post post = postService.write(reqBody.title, reqBody.content);
 
-        Map<String, Object> data = Map.of( // Map.of는 강제로 불변의 값을 지정하는 것
-                "item", new PostDto(post),
-                "total", postService.count()
-        );
-
         return new RsData<>(
                 "200-1",
                 "%d번 글이 작성되었습니다".formatted(post.getId()),
-                data
+                Map.of( // Map.of는 강제로 불변의 값을 지정하는 것
+                        "item", new PostDto(post),
+                        "total", postService.count()
+                )
         );
     }
 }
