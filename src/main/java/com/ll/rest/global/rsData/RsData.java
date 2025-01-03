@@ -1,5 +1,6 @@
 package com.ll.rest.global.rsData;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class RsData<T> { // <T> 는 어떤 타입이든 사용 가능하다
         this(resultCode, msg, null);
     }
 
+    @JsonIgnore
     public int getStatusCode() {
         return Integer.parseInt(resultCode.split("-")[0]);
     }
