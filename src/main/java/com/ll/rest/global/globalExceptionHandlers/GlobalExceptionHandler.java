@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new RsData<>(
-                        "400-1",
+                        "404-1",
                         "해당 데이터가 존재하지 않습니다."
                 ));
     }
