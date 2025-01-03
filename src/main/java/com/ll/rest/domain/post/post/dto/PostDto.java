@@ -26,7 +26,7 @@ public class PostDto {
     public PostDto(Post post) {
         this.id = post.getId();
         this.createDate = post.getCreateDate();
-        this.modifyDate = post.getModifiedDate();
+        this.modifyDate = post.getModifyDate();
         this.title = post.getTitle();
         this.content = post.getContent();
     }

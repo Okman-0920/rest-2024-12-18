@@ -21,5 +21,5 @@ public class BaseTime extends BaseEntity {
 
     @LastModifiedDate
     @Setter(AccessLevel.PRIVATE)
-    private LocalDateTime modifiedDate;
+    private LocalDateTime modifyDate;
 }

@@ -1,7 +1,7 @@
-package com.ll.rest.domain.post.member.service;
+package com.ll.rest.domain.member.member.service;
 
-import com.ll.rest.domain.post.member.repository.MemberRepository;
-import com.ll.rest.domain.post.member.entity.Member;
+import com.ll.rest.domain.member.member.repository.MemberRepository;
+import com.ll.rest.domain.member.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

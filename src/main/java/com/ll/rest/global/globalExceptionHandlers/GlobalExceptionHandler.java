@@ -3,13 +3,13 @@ package com.ll.rest.global.globalExceptionHandlers;
 import com.ll.rest.global.app.AppConfig;
 import com.ll.rest.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.View;
 
 import java.util.Comparator;
 import java.util.NoSuchElementException;
@@ -54,5 +54,18 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    private final View error;
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<RsData<Void>> handle(DataIntegrityViolationException ex) {
+
+        if (AppConfig.isNotProd()) ex.printStackTrace();
+
+//        String message = ex.getMessage();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new RsData<>(
+                        "400-1",
+                        "이미 존재하는 데이터 입니다."
+                ));
+    }
 }

@@ -1,4 +1,4 @@
-package com.ll.rest.domain.post.member.entity;
+package com.ll.rest.domain.member.member.entity;
 
 import com.ll.rest.global.jpa.entity.BaseTime;
 import jakarta.persistence.Column;
