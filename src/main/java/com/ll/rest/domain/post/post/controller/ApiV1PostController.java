@@ -48,15 +48,23 @@ public class ApiV1PostController {
 
     // 삭제
     @DeleteMapping("/{id}")
-    public RsData<Void> deleteItem(@PathVariable long id) {
+    public ResponseEntity<Void> deleteItem(@PathVariable long id) {
+     // public ResponseEntity<RsData<Void>> deleteItem(@PathVariable long id) {
         Post post = postService.findById(id).get();
 
         postService.delete(post);
 
-        return new RsData<> (
-                "200-1",
-                "%d번 글이 삭제되었습니다".formatted(id)
-        );
+        /* HTTP statusCode 200
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); */
+        return ResponseEntity.noContent().build(); // 위에꺼보다 간단하게
+
+        /* HTTP statusCode 204
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(new RsData<>(
+                        "200-1",
+                        "%s번 글이 삭제되었습니다".formatted(id)
+                )); */
     }
 
     // 수정
