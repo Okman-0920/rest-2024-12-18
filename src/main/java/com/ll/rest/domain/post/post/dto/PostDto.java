@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 public class PostDto {
     private long id;
 
-    @JsonProperty("createDatetime")
+    @JsonProperty("createdDatetime")
     private LocalDateTime createDate;
 
-    @JsonProperty("modifyDatetime")
+    @JsonProperty("modifiedDatetime")
     private LocalDateTime modifyDate;
 
-    private String title;
-    private String content;
+    private final String title;
+    private final String content;
 
     public PostDto(Post post) {
         this.id = post.getId();

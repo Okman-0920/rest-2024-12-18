@@ -8,11 +8,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -54,8 +55,7 @@ public class ApiV1PostController {
 
         return new RsData<> (
                 "200-1",
-                "%d번 글이 삭제되었습니다".formatted(id),
-                null
+                "%d번 글이 삭제되었습니다".formatted(id)
         );
     }
 
@@ -108,20 +108,33 @@ public class ApiV1PostController {
     ) {
     }
 
+    record PostWriteResBody (
+        PostDto item,
+        long totalCount
+    ) {
+    }
+
     @PostMapping("/write")
-    public RsData<Map<String, Object>> writeItem(
+    public ResponseEntity<RsData<PostWriteResBody>> writeItem(
             // Map<Key 값, Value 값> --> 쉽게 말하면 별명: 옥만
+            // @ResponseEntity: 응답(헤더, 바디) 을 받기 위해 사용
             @RequestBody @Valid PostWriteBody reqBody
     ) {
         Post post = postService.write(reqBody.title, reqBody.content);
 
-        return new RsData<>(
-                "200-1",
-                "%d번 글이 작성되었습니다".formatted(post.getId()),
-                Map.of( // Map.of는 강제로 불변의 값을 지정하는 것
-                        "item", new PostDto(post),
-                        "total", postService.count()
-                )
-        );
+        return ResponseEntity
+                // 헤더
+                .status(HttpStatus.CREATED)
+
+                // 바디
+                .body(new RsData<>(
+                        "200-1",
+                        "%d번 글이 작성되었습니다".formatted(post.getId()),
+                        // Map.of는 강제로 불변의 값을 지정하는 것
+                        new PostWriteResBody(
+                                new PostDto(post),
+                                postService.count()
+                        )
+                ));
     }
 }
