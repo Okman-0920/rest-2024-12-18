@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -108,15 +109,21 @@ public class ApiV1PostController {
     }
 
     @PostMapping("/write")
-    public RsData<Long> writeItem(
+    public RsData<Map<String, Object>> writeItem(
+            // Map<Key 값, Value 값> --> 쉽게 말하면 별명: 옥만
             @RequestBody @Valid PostWriteBody reqBody
     ) {
         Post post = postService.write(reqBody.title, reqBody.content);
 
+        Map<String, Object> data = Map.of( // Map.of는 강제로 불변의 값을 지정하는 것
+                "item", new PostDto(post),
+                "total", postService.count()
+        );
+
         return new RsData<>(
                 "200-1",
                 "%d번 글이 작성되었습니다".formatted(post.getId()),
-                post.getId()
+                data
         );
     }
 }
