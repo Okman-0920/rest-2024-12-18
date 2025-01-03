@@ -18,4 +18,8 @@ public class RsData<T> { // <T> 는 어떤 타입이든 사용 가능하다
     public RsData(String resultCode, String msg) {
         this(resultCode, msg, null);
     }
+
+    public int getStatusCode() {
+        return Integer.parseInt(resultCode.split("-")[0]);
+    }
 }
