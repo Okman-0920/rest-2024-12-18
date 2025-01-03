@@ -27,9 +27,10 @@ public class ApiV1PostController {
 
     // 단건 조회
     @GetMapping("/{id}")
-    public PostDto getItem2(@PathVariable long id) {
-        Post post = postService.findById(id).get();
-        return new PostDto(post);
+    public PostDto getItem(@PathVariable long id) {
+        return postService.findById(id)
+                .map(PostDto::new)
+                .orElseThrow();
     }
 
     // 삭제
