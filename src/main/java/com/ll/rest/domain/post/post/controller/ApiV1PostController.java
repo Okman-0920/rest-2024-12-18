@@ -1,15 +1,17 @@
 package com.ll.rest.domain.post.post.controller;
 
+import com.ll.rest.domain.post.post.dto.PostDto;
 import com.ll.rest.domain.post.post.entity.Post;
 import com.ll.rest.domain.post.post.service.PostService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.ll.rest.global.rsData.RsData;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -23,65 +25,83 @@ public class ApiV1PostController {
         return postService.findAllByOrderByIdDesc();
     }
 
-    // 포장해서 반환할꺼 없고, 찾아서 그냥 반환시키면 되기 때문에 아래꺼
-    /* @GetMapping("/{id}")
-    public Optional<Post> getItem(@PathVariable long id) {
-        return postService.findById(id);
-    } */
-
     // 단건 조회
     @GetMapping("/{id}")
-    public Post getItem2(@PathVariable long id) {
-        // testCode
-        /*Optional<Integer> t2 = Optional.of(2);
-        t2.get();
-        Optional<Integer> t = Optional.empty();
-        t.get();*/
-        return postService.findById(id).get();
+    public PostDto getItem2(@PathVariable long id) {
+        Post post = postService.findById(id).get();
+        return new PostDto(post);
     }
 
     // 삭제
     @DeleteMapping("/{id}")
-    public Map<String, Object> deleteItem(@PathVariable long id) {
+    public RsData deleteItem(@PathVariable long id) {
         Post post = postService.findById(id).get();
 
         postService.delete(post);
 
-        // Object: 뭐든 넣어도 됨
-        Map<String, Object> rsData = new HashMap<>();
-        rsData.put("resultCode", "200-1");
-        rsData.put("msg", "%d번 글을 삭제하였습니다.".formatted(id));
-
-        return rsData;
+        return new RsData(
+                "200-1",
+                "%d번 글이 삭제되었습니다".formatted(id)
+        );
     }
 
-    @AllArgsConstructor
-    @Getter
-    public static class PostModifyBody {
-        private String title;
-        private String content;
+    // 수정
+    public record PostModifyBody (
+            @NotBlank (message = "제목을 입력하세요")
+            @Length (min = 2, message = "2자이상 입력하세요")
+            String title,
+
+            @NotBlank (message = "내용을 입력하세요")
+            @Length (min = 2, message = "2자이상 입력하세요")
+            String content
+    ) {
     }
 
     @PutMapping("/{id}")
-    public Map<String, Object> modifyItem(
+    @Transactional
+    public RsData modifyItem(
             @PathVariable long id,
-            @RequestBody PostModifyBody reqBody
-            // @RequestBody: HTTP 요청의 본문(Body)을 Java객체로 변환
-            // 쉽게말해서 나(클라이언트)가 입력한 값을 서버로 전송하기 위해 사용
-            // 왜냐면, 클라이언트는 웹 브라우저 상에서 정보를 입력할 것이기 때문
+            @RequestBody @Valid PostModifyBody reqBody
+            /* @RequestBody: HTTP 요청(request)의 본문(Body)을 Java객체로 변환
+            쉽게말해서 나(클라이언트)가 입력한 값을 서버로 전송하기 위해 사용
+            왜냐면, 클라이언트는 웹 브라우저 상에서 정보를 입력할 것이기 때문 */
+            // @Valid : 클라이언트의 입력값에 대한 유효성 검사
     ) {
 
         Post post = postService.findById(id).get();
         // 수정하는거니까 이미 그 저장된 글임, 그래서 get()으로 불러옴
 
-        postService.modify(post, reqBody.getTitle(), reqBody.getContent());
+        postService.modify(post, reqBody.title(), reqBody.content());
         // 사용자가 수정할 post의 id값을 가져옴
         // 사용자가 입력한 title과, content값을 인자로 가져옴
 
-        Map<String, Object> rsData = new HashMap<>();
-        rsData.put("resultCode", "200-1");
-        rsData.put("msg", "%d번 글을 수정하였습니다.".formatted(id));
+        return new RsData(
+                "200-1",
+                "%d번 글이 수정되었습니다".formatted(id)
+        );
+    }
 
-        return rsData;
+    // 작성
+    public record PostWriteBody (
+            @NotBlank (message = "내용을 입력하세요")
+            @Length (min = 2)
+            String title,
+
+            @NotBlank (message = "내용을 입력하세요")
+            @Length (min = 2)
+            String content
+    ) {
+    }
+
+    @PostMapping("/write")
+    public RsData writeItem(
+            @RequestBody @Valid PostWriteBody reqBody
+    ) {
+        Post post = postService.write(reqBody.title, reqBody.content);
+
+        return new RsData(
+                "200-1",
+                "%d번 글이 작성되었습니다".formatted(post.getId())
+        );
     }
 }

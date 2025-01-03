@@ -1,4 +1,4 @@
-package com.ll.rest.global.baseInit.baseData;
+package com.ll.rest.global.baseInit;
 
 import com.ll.rest.domain.post.post.entity.Post;
 import com.ll.rest.domain.post.post.service.PostService;
