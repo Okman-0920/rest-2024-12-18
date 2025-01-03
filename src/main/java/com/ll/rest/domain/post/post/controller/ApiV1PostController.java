@@ -120,7 +120,7 @@ public class ApiV1PostController {
     ) {
     }
 
-    @PostMapping("/write")
+    @PostMapping
     public RsData<PostWriteResBody> writeItem(
             // Map<Key 값, Value 값> --> 쉽게 말하면 별명: 옥만
             // @ResponseEntity: 응답(헤더, 바디) 을 받기 위해 사용
