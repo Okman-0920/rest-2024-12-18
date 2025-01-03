@@ -21,8 +21,12 @@ public class ApiV1PostController {
 
     // 다건 조회
     @GetMapping
-    public List<Post> getItems() {
-        return postService.findAllByOrderByIdDesc();
+    public List<PostDto> getItems() {
+        return postService
+                .findAllByOrderByIdDesc()
+                .stream()
+                .map(PostDto::new)
+                .toList();
     }
 
     // 단건 조회
