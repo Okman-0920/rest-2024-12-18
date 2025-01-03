@@ -22,11 +22,18 @@ public class ApiV1PostController {
     // 다건 조회
     @GetMapping
     public List<PostDto> getItems() {
-        return postService
+                return postService
                 .findAllByOrderByIdDesc()
                 .stream()
                 .map(PostDto::new)
                 .toList();
+
+/*        List<Post> posts = postService.findAllByOrderByIdDesc();
+        List<PostDto> postDtos = new ArrayList<>();
+        for (Post post : posts) {
+            postDtos.add(new PostDto(post));
+        }
+        return postDtos;*/// List 사용 시
     }
 
     // 단건 조회
