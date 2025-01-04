@@ -3,7 +3,6 @@ package com.ll.rest.global.globalExceptionHandlers;
 import com.ll.rest.global.app.AppConfig;
 import com.ll.rest.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -54,18 +53,16 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<RsData<Void>> handle(DataIntegrityViolationException ex) {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<RsData<Void>> handle(RuntimeException ex) {
 
         if (AppConfig.isNotProd()) ex.printStackTrace();
-
-//        String message = ex.getMessage();
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new RsData<>(
                         "400-1",
-                        "이미 존재하는 데이터 입니다."
+                        ex.getMessage()
                 ));
     }
 }
