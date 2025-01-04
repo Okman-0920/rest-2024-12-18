@@ -15,6 +15,12 @@ public class MemberService {
     }
 
     public Member join(String username, String password, String nickname) {
+        memberRepository
+                .findByUsername(username)
+                .ifPresent(_ -> {
+                    throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+                });
+
         Member member = Member
                 .builder()
                 .username(username)
