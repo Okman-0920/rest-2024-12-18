@@ -2,8 +2,8 @@ package com.ll.rest.domain.member.member.service;
 
 import com.ll.rest.domain.member.member.entity.Member;
 import com.ll.rest.domain.member.member.repository.MemberRepository;
+import com.ll.rest.global.exceptions.ServiceException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,12 +21,10 @@ public class MemberService {
         memberRepository
                 .findByUsername(username)
                 .ifPresent(_ -> {
-                    throw new ServiceException(
-                            "400-1"/*"해당 username은 이미 사용중입니다."*/);
+                    throw new ServiceException("400-1", "해당 username은 이미 사용중입니다.");
                 });
 
-        Member member = Member
-                .builder()
+        Member member = Member.builder()
                 .username(username)
                 .password(password)
                 .nickname(nickname)

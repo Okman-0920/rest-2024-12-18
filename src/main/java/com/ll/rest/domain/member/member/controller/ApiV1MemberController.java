@@ -20,22 +20,27 @@ public class ApiV1MemberController {
     private final MemberService memberService;
 
     record MemberJoinReqBody(
-            @NotBlank @Length(min = 4) String username,
-            @NotBlank @Length(min = 10) String password,
-            @NotBlank @Length(min = 1) String nickname
+            @NotBlank
+            @Length(min = 4)
+            String username,
+            @NotBlank
+            @Length(min = 4)
+            String password,
+            @NotBlank
+            @Length(min = 2)
+            String nickname
     ) {
     }
 
     @PostMapping("/join")
     public RsData<MemberDto> join(
-            @RequestBody @Valid MemberJoinReqBody memReqBody
+            @RequestBody @Valid MemberJoinReqBody reqBody
     ) {
-        Member member = memberService.join(
-                memReqBody.username, memReqBody.password, memReqBody.nickname);
+        Member member = memberService.join(reqBody.username, reqBody.password, reqBody.nickname);
 
         return new RsData<>(
                 "201-1",
-                "%s님 환영합니다".formatted(member.getNickname()),
+                "%s님 환영합니다.".formatted(member.getNickname()),
                 new MemberDto(member)
         );
     }

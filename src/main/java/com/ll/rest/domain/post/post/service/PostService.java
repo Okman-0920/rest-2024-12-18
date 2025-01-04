@@ -21,8 +21,7 @@ public class PostService {
 
     // 작성
     public Post write(Member author, String title, String content) {
-        Post post = Post
-                .builder()
+        Post post = Post.builder()
                 .author(author)
                 .title(title)
                 .content(content)

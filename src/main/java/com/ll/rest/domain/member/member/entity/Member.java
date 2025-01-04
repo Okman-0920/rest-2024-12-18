@@ -9,15 +9,19 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Member extends BaseTime {
-    @Column(unique = true, length = 20)
+    @Column(unique = true, length = 30)
     private String username;
 
-    @Column(length = 30)
+    @Column(length = 50)
     private String password;
 
-    @Column(length = 10)
+    @Column(length = 30)
     private String nickname;
+
+    public String getName() {
+        return this.nickname;
+    }
 }

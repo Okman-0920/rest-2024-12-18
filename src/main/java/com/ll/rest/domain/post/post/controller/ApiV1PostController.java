@@ -44,6 +44,7 @@ public class ApiV1PostController {
     public PostDto getItem(@PathVariable long id) {
         return postService.findById(id)
                 .map(PostDto::new)
+                // .map (post -> new PostDto(post))
                 .orElseThrow();
     }
 
