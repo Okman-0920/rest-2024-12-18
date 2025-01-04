@@ -1,5 +1,7 @@
 package com.ll.rest.domain.post.post.controller;
 
+import com.ll.rest.domain.member.member.entity.Member;
+import com.ll.rest.domain.member.member.service.MemberService;
 import com.ll.rest.domain.post.post.dto.PostDto;
 import com.ll.rest.domain.post.post.entity.Post;
 import com.ll.rest.domain.post.post.service.PostService;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApiV1PostController {
     private final PostService postService;
+    private final MemberService memberService;
 
     // 다건 조회
     @GetMapping
@@ -126,7 +129,9 @@ public class ApiV1PostController {
             // @ResponseEntity: 응답(헤더, 바디) 을 받기 위해 사용
             @RequestBody @Valid PostWriteBody reqBody
     ) {
-        Post post = postService.write(reqBody.title, reqBody.content);
+        Member actor = memberService.findByUsername("user3").get();
+
+        Post post = postService.write(actor, reqBody.title, reqBody.content);
 
         return new RsData<>(
                 "201-1",

@@ -1,5 +1,4 @@
-package com.ll.rest.global.exception;
-
+package com.ll.rest.global.exceptions;
 
 import com.ll.rest.global.rsData.RsData;
 

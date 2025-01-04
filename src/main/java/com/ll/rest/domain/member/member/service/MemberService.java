@@ -1,10 +1,12 @@
 package com.ll.rest.domain.member.member.service;
 
-import com.ll.rest.domain.member.member.repository.MemberRepository;
 import com.ll.rest.domain.member.member.entity.Member;
+import com.ll.rest.domain.member.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class MemberService {
                 .findByUsername(username)
                 .ifPresent(_ -> {
                     throw new ServiceException(
-                            "400-1", "해당 username은 이미 사용중입니다.");
+                            "400-1"/*"해당 username은 이미 사용중입니다."*/);
                 });
 
         Member member = Member
@@ -30,8 +32,10 @@ public class MemberService {
                 .nickname(nickname)
                 .build();
 
-        memberRepository.save(member);
+        return memberRepository.save(member);
+    }
 
-        return member;
+    public Optional<Member> findByUsername(String username) {
+        return memberRepository.findByUsername(username);
     }
 }

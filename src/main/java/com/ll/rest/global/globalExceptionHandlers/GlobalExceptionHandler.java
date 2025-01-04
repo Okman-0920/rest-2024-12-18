@@ -1,7 +1,7 @@
 package com.ll.rest.global.globalExceptionHandlers;
 
 import com.ll.rest.global.app.AppConfig;
-import com.ll.rest.global.exception.ServiceException;
+import com.ll.rest.global.exceptions.ServiceException;
 import com.ll.rest.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
