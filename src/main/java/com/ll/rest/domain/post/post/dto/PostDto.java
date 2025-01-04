@@ -1,7 +1,6 @@
 package com.ll.rest.domain.post.post.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ll.rest.domain.member.member.dto.MemberDto;
 import com.ll.rest.domain.post.post.entity.Post;
 import lombok.Getter;
 
@@ -21,16 +20,20 @@ public class PostDto {
     @JsonProperty("modifiedDatetime")
     private LocalDateTime modifyDate;
 
-    private MemberDto author;
+    private long authorId;
+        
+    private String authorName;
 
-    private final String title;
-    private final String content;
+    private String title;
+
+    private String content;
 
     public PostDto(Post post) {
         this.id = post.getId();
         this.createDate = post.getCreateDate();
         this.modifyDate = post.getModifyDate();
-        this.author = new MemberDto(post.getAuthor());
+        this.authorId = post.getAuthor().getId();
+        this.authorName = post.getAuthor().getName();
         this.title = post.getTitle();
         this.content = post.getContent();
     }
