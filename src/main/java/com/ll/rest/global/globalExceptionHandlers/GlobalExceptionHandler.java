@@ -1,6 +1,7 @@
 package com.ll.rest.global.globalExceptionHandlers;
 
 import com.ll.rest.global.app.AppConfig;
+import com.ll.rest.global.exception.ServiceException;
 import com.ll.rest.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ public class GlobalExceptionHandler {
 
         if (AppConfig.isNotProd()) ex.printStackTrace();
         // AppConfig : 임의로 만든거
+        // 운영모드가 아니면 자세한 오류 내역을 출력해라
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
@@ -53,16 +55,15 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<RsData<Void>> handle(RuntimeException ex) {
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<RsData<Void>> handle(ServiceException ex) {
 
         if (AppConfig.isNotProd()) ex.printStackTrace();
 
+        RsData<Void> rsData = ex.getRsData();
+
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new RsData<>(
-                        "400-1",
-                        ex.getMessage()
-                ));
+                .status(rsData.getStatusCode())
+                .body(rsData);
     }
 }
