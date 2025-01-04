@@ -24,6 +24,7 @@ public class MemberService {
                     throw new ServiceException("400-1", "해당 username은 이미 사용중입니다.");
                 });
 
+
         Member member = Member.builder()
                 .username(username)
                 .password(password)

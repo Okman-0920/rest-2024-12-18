@@ -25,7 +25,7 @@ public class ApiV1PostController {
     // 다건 조회
     @GetMapping
     public List<PostDto> getItems() {
-                return postService
+        return postService
                 .findAllByOrderByIdDesc()
                 .stream()
                 .map(PostDto::new)
@@ -41,17 +41,21 @@ public class ApiV1PostController {
 
     // 단건 조회
     @GetMapping("/{id}")
-    public PostDto getItem(@PathVariable long id) {
+    public PostDto getItem(
+            @PathVariable long id
+    ) {
         return postService.findById(id)
                 .map(PostDto::new)
-                // .map (post -> new PostDto(post))
                 .orElseThrow();
+        // .map (post -> new PostDto(post))
     }
 
     // 삭제
     @DeleteMapping("/{id}")
 //    public ResponseEntity<Void> deleteItem(@PathVariable long id) {
-    public RsData<Void> deleteItem(@PathVariable long id) {
+    public RsData<Void> deleteItem(
+            @PathVariable long id
+    ) {
         Post post = postService.findById(id).get();
 
         postService.delete(post);
@@ -70,13 +74,13 @@ public class ApiV1PostController {
     }
 
     // 수정
-    public record PostModifyBody (
-            @NotBlank (message = "제목을 입력하세요")
-            @Length (min = 2, message = "2자이상 입력하세요")
+    record PostModifyReqBody (
+            @NotBlank
+            @Length (min = 2)
             String title,
 
-            @NotBlank (message = "내용을 입력하세요")
-            @Length (min = 2, message = "2자이상 입력하세요")
+            @NotBlank
+            @Length (min = 2)
             String content
     ) {
     }
@@ -85,7 +89,7 @@ public class ApiV1PostController {
     @Transactional
     public RsData<PostDto> modifyItem(
             @PathVariable long id,
-            @RequestBody @Valid PostModifyBody reqBody
+            @RequestBody @Valid PostModifyReqBody reqBody
             /* @RequestBody: HTTP 요청(request)의 본문(Body)을 Java객체로 변환
             쉽게말해서 나(클라이언트)가 입력한 값을 서버로 전송하기 위해 사용
             왜냐면, 클라이언트는 웹 브라우저 상에서 정보를 입력할 것이기 때문 */
@@ -107,7 +111,7 @@ public class ApiV1PostController {
     }
 
     // 작성
-    public record PostWriteBody (
+    record PostWriteBody (
             @NotBlank (message = "내용을 입력하세요")
             @Length (min = 2)
             String title,
@@ -142,6 +146,6 @@ public class ApiV1PostController {
                         new PostDto(post),
                         postService.count()
                         )
-                );
+        );
     }
 }

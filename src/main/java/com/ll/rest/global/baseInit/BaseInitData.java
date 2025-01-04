@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class BaseInitData {
     private final MemberService memberService;
     private final PostService postService;
-
     @Autowired
     @Lazy
     private BaseInitData self;
@@ -41,13 +40,11 @@ public class BaseInitData {
         Member memberUser3 = memberService.join("user3", "1234", "유저3");
         Member memberUser4 = memberService.join("user4", "1234", "유저4");
         Member memberUser5 = memberService.join("user5", "1234", "유저5");
-
     }
 
     @Transactional
     public void work2() {
-        if (postService.count() > 0)
-            return;
+        if (postService.count() > 0) return;
 
         Member memberUser1 = memberService.findByUsername("user1").get();
         Member memberUser2 = memberService.findByUsername("user2").get();

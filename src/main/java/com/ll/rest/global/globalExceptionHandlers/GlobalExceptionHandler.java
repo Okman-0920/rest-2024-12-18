@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+    // // 데이터가 존재하지 않을 때 발생하는 예외에 대하여 404 응답을 반환
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<RsData<Void>> handle(NoSuchElementException ex) {
 
@@ -33,6 +35,7 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    // 유효성 검사 오류를 처리하여 400 응답과 상세 오류 메시지를 반환
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<RsData<Void>> handle(MethodArgumentNotValidException ex) {
 
@@ -43,18 +46,19 @@ public class GlobalExceptionHandler {
                 .stream()
                 .filter(error -> error instanceof FieldError)
                 .map(error -> (FieldError) error)
-                .map(error -> error.getField() + "-" + error.getCode() + ": " + error.getDefaultMessage())
+                .map(error -> error.getField() + "-" + error.getCode() + "-" + error.getDefaultMessage())
                 .sorted(Comparator.comparing(String::toString))
                 .collect(Collectors.joining("\n"));
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new RsData<>(
-                "400-1",
-                message
+                        "400-1",
+                        message
                 ));
     }
 
+    // 서비스 예외를 처리하여 해당 예외에 맞는 상태 코드와 데이터를 반환
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<RsData<Void>> handle(ServiceException ex) {
 

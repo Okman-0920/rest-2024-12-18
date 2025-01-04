@@ -21,7 +21,7 @@ public class PostDto {
     private LocalDateTime modifyDate;
 
     private long authorId;
-        
+
     private String authorName;
 
     private String title;
